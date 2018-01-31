@@ -29,6 +29,11 @@ $("#addButton").on("click", function(event) {
 	}
 
 	database.ref().push(objectToPush);
+
+	$("#name-input").val("");
+	$("#role-input").val("");
+	$("#start-date-input").val("");
+	$("#monthly-rate-input").val("");
 	// Dynamically create the rows
 });
 
@@ -39,8 +44,13 @@ database.ref().on("child_added", function(snapshot) {
 	var retrievedRole = snapshot.val().role;
 	var retrievedStartDate = snapshot.val().startDate;
 	var retrievedMonthlyRate = snapshot.val().monthlyRate;
-	var formattedDate = moment(retrievedStartDate, "MM-DD-YY");
+	console.log("Retrieved date is: " + retrievedStartDate);
+	var formattedDate = moment(retrievedStartDate).format("MM-DD-YY");
 	var monthsWorked = moment().diff(formattedDate, 'months');
+
+	console.log("Formatted date: " + formattedDate);
+	console.log("Months worked: " + monthsWorked);
+
 	var billedDollars = monthsWorked * retrievedMonthlyRate;
 
 	var newRow = $("<tr><td>" + retrievedName + "</td><td>" + retrievedRole + "</td><td>" + retrievedStartDate + "</td><td>" + monthsWorked + "</td><td>" + retrievedMonthlyRate + "</td><td>" + billedDollars + "</td></tr>");
