@@ -32,3 +32,18 @@ $("#addButton").on("click", function(event) {
 	// Dynamically create the rows
 });
 
+database.ref().on("child_added", function(snapshot) {
+	console.log(snapshot);
+
+	var retrievedName = snapshot.val().name;
+	var retrievedRole = snapshot.val().role;
+	var retrievedStartDate = snapshot.val().startDate;
+	var retrievedMonthlyRate = snapshot.val().monthlyRate;
+	var formattedDate = moment(retrievedStartDate, "MM-DD-YY");
+	var monthsWorked = moment().diff(formattedDate, 'months');
+	var billedDollars = monthsWorked * retrievedMonthlyRate;
+
+	var newRow = $("<tr><td>" + retrievedName + "</td><td>" + retrievedRole + "</td><td>" + retrievedStartDate + "</td><td>" + monthsWorked + "</td><td>" + retrievedMonthlyRate + "</td><td>" + billedDollars + "</td></tr>");
+
+	$("#employee-table").append(newRow);
+});
